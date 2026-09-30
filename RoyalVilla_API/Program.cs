@@ -14,10 +14,13 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddAutoMapper(options => {
-    options.CreateMap<Villa, VillaCreateDTO>().ReverseMap();
+//builder.Services.AddAutoMapper(options => {
+//    options.CreateMap<Villa, VillaCreateDTO>().ReverseMap();
+//    options.CreateMap<Villa, VillaUpdateDTO>().ReverseMap();
 
-});
+//});
+
+builder.Services.AddSingleton<VillaMapper>();
 
 var app = builder.Build();
 
