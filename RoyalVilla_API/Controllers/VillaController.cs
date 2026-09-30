@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RoyalVilla_API.Data;
 using RoyalVilla_API.Models;
+using RoyalVilla_API.Models.DTO;
 using System.Collections;
 
 namespace RoyalVilla_API.Controllers
@@ -11,10 +13,12 @@ namespace RoyalVilla_API.Controllers
     public class VillaController : ControllerBase
     {
         private readonly ApplicationDbContext db;
+        private readonly IMapper mapper;
 
-        public VillaController(ApplicationDbContext db)
+        public VillaController(ApplicationDbContext db, IMapper mapper)
         {
             this.db = db;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -54,6 +58,29 @@ namespace RoyalVilla_API.Controllers
         //    return $"Get Villa with ID: {id} and Name: {name}";
         //}
 
+        [HttpPost]
+        public async Task<ActionResult<Villa>> CreateVilla(VillaCreateDTO villaDTO)
+        {
+            try
+            {
+                if (villaDTO == null)
+                {
+                    return BadRequest("Villa data is required.");
+                }
+
+                var villa = mapper.Map<Villa>(villaDTO);
+
+                await db.Villa.AddAsync(villa);
+                await db.SaveChangesAsync();
+                return Ok(villa);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    $"An error occurred while creating the villa: {ex.Message}");
+            }
+        }
 
     }
 }
