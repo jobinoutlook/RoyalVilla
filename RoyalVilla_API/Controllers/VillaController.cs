@@ -121,5 +121,37 @@ namespace RoyalVilla_API.Controllers
             }
         }
 
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<Villa>> DeleteVilla(int id)
+        {
+            try
+            {
+
+
+                if (id <= 0)
+                {
+                    return BadRequest("Invalid Villa ID");
+                }
+
+                var existingVilla = await db.Villa.FindAsync(id);
+
+                if (existingVilla == null)
+                {
+                    return NotFound($"Villa with ID {id} not found.");
+                }
+
+                db.Villa.Remove(existingVilla);
+
+                await db.SaveChangesAsync();
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    $"An error occurred while deleting the villa: {ex.Message}");
+            }
+        }
+
     }
 }
