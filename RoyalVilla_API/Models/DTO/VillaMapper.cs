@@ -12,5 +12,12 @@ namespace RoyalVilla_API.Models.DTO
         public partial Villa ToEntity(VillaUpdateDTO dto);
 
         public partial void UpdateVilla(VillaUpdateDTO source, Villa target);
+
+        public partial VillaDTO ToDTO(Villa entity);
+        
+        public partial Villa ToEntity(VillaDTO dto);
+
+        public partial List<VillaDTO> ToDTOList(List<Villa> entities);
+
     }
 }
