@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RoyalVilla_API.Data;
 using RoyalVilla_API.Models;
 using RoyalVilla_API.Models.DTO;
+using RoyalVilla_API.Models.DTO.VillaDTOs;
 using System.Collections;
 
 namespace RoyalVilla_API.Controllers
@@ -21,7 +22,6 @@ namespace RoyalVilla_API.Controllers
         {
             this.db = db;
             this.mapper = mapper;
-            //this.mapper = mapper;
         }
 
         [HttpGet]
@@ -97,7 +97,7 @@ namespace RoyalVilla_API.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<ApiResponse<VillaUpdateDTO>>> UpdateVilla(int id, VillaUpdateDTO villaDTO)
+        public async Task<ActionResult<ApiResponse<VillaDTO>>> UpdateVilla(int id, VillaUpdateDTO villaDTO)
         {
             try
             {
@@ -130,7 +130,7 @@ namespace RoyalVilla_API.Controllers
                 existingVilla.UpdatedDate = DateTime.Now;
 
                 await db.SaveChangesAsync();
-                return Ok(villaDTO);
+                return Ok(mapper.ToDTO(villaDTO));
 
             }
             catch (Exception ex)
