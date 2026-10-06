@@ -2,7 +2,7 @@
 
 namespace RoyalVilla_API.Models.DTO
 {
-    public class RegistrationRequestDTO
+    public class RegisterationRequestDTO
     {
         [Required]
         [EmailAddress]
