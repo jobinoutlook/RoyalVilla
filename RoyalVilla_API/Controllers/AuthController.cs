@@ -16,10 +16,10 @@ namespace RoyalVilla_API.Controllers
             _authService = authService;
         }
 
-        [HttpGet]
+        [HttpPost("register")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<VillaDTO>>), StatusCodes.Status200OK)]   //for documentation
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ApiResponse<UserDTO>>> Register(RegisterationRequestDTO registerationRequestDTO)
+        public async Task<ActionResult<ApiResponse<UserDTO>>> Register([FromBody]RegisterationRequestDTO registerationRequestDTO)
         {
             try
             {
@@ -51,6 +51,34 @@ namespace RoyalVilla_API.Controllers
             catch (Exception ex)
             {
                 var errorResponse = ApiResponse<object>.Error(StatusCodes.Status500InternalServerError, "An error occurred during registration", new { ExceptionMessage = ex.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
+            }
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<ApiResponse<LoginResponseDTO>>> Login([FromBody]LoginRequestDTO loginRequestDTO)
+        {
+            try
+            {
+                if (loginRequestDTO == null)
+                {
+                    var errorResponse = ApiResponse<object>.BadRequest("Login data is required");
+                    return BadRequest(errorResponse);
+                }
+
+                var loginResponse = await _authService.LoginAsync(loginRequestDTO);
+
+                if (loginResponse == null)
+                {
+                    var errorResponse = ApiResponse<object>.BadRequest("Invalid email or password");
+                    return BadRequest(errorResponse);
+                }
+
+                return Ok(ApiResponse<LoginResponseDTO>.Ok(loginResponse, "Login successful"));
+            }
+            catch (Exception ex)
+            {
+                var errorResponse = ApiResponse<object>.Error(StatusCodes.Status500InternalServerError, "An error occurred during login", new { ExceptionMessage = ex.Message });
                 return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
             }
         }
