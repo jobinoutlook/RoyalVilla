@@ -86,7 +86,7 @@ namespace RoyalVilla_API.Services
         private string GenerateJwtToken(User user)
         {
             // Implement token generation logic here (e.g., JWT)
-            var key = _configuration["JwtSettings:SecretKey"];
+            var key = _configuration["JwtSettings:SecretKey"]??"";
             var encodedKey = System.Text.Encoding.UTF8.GetBytes(key);
 
             var tokenDescriptor = new SecurityTokenDescriptor()

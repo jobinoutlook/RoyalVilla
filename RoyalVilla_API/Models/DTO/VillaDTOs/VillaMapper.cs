@@ -8,7 +8,9 @@ namespace RoyalVilla_API.Models.DTO.VillaDTOs
     public partial class VillaMapper
     {
 
-
+        [MapperIgnoreTarget(nameof(Villa.Id))]
+        [MapperIgnoreTarget(nameof(Villa.CreatedDate))]
+        [MapperIgnoreTarget(nameof(Villa.UpdatedDate))]
         public partial Villa ToEntity(VillaCreateDTO dto);
 
         //public partial VillaDTO ToDTO(VillaCreateDTO dto);
@@ -17,8 +19,12 @@ namespace RoyalVilla_API.Models.DTO.VillaDTOs
 
         public partial VillaDTO ToDTO(VillaUpdateDTO dto);
 
+        [MapperIgnoreTarget(nameof(Villa.CreatedDate))]
+        [MapperIgnoreTarget(nameof(Villa.UpdatedDate))]
         public partial void UpdateVilla(VillaUpdateDTO source, Villa target);
 
+        [MapperIgnoreSource(nameof(Villa.CreatedDate))]
+        [MapperIgnoreSource(nameof(Villa.UpdatedDate))]
         public partial VillaDTO ToDTO(Villa entity);
 
         //public partial Villa ToEntity(VillaDTO dto);
