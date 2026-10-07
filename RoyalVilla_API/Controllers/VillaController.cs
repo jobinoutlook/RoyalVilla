@@ -12,6 +12,7 @@ namespace RoyalVilla_API.Controllers
 {
     [ApiController]
     [Route("api/villa")]
+    //[Authorize(Roles = "Customer,Admin")]
     public class VillaController : ControllerBase
     {
         private readonly ApplicationDbContext db;
@@ -26,7 +27,7 @@ namespace RoyalVilla_API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        //[Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<VillaDTO>>),StatusCodes.Status200OK)]   //for documentation
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ApiResponse<IEnumerable<VillaDTO>>>> GetVillas()
@@ -39,6 +40,7 @@ namespace RoyalVilla_API.Controllers
         }
 
         [HttpGet("{id:int}")]
+        //[AllowAnonymous]
         public async Task<ActionResult<ApiResponse<VillaDTO>>> GetVillaById(int id)
         {
             try
