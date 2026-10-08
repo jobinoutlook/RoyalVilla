@@ -5,6 +5,7 @@ using Microsoft.OpenApi;
 using RoyalVilla_API.Data;
 using RoyalVilla_API.Models;
 using RoyalVilla_API.Models.DTO;
+using RoyalVilla_API.Models.DTO.VillaAmenitiesDTOs;
 using RoyalVilla_API.Models.DTO.VillaDTOs;
 using RoyalVilla_API.Services;
 using Scalar.AspNetCore;
@@ -77,6 +78,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddSingleton<VillaMapper>();
 builder.Services.AddSingleton<UserMapper>();
+builder.Services.AddSingleton<VillaAmenitiesMapper>();
 
 var app = builder.Build();
 

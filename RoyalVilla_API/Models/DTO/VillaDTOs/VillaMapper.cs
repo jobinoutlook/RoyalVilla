@@ -23,7 +23,7 @@ namespace RoyalVilla_API.Models.DTO.VillaDTOs
         [MapperIgnoreTarget(nameof(Villa.CreatedDate))]
         [MapperIgnoreTarget(nameof(Villa.UpdatedDate))]
         [MapperIgnoreTarget(nameof(Villa.Amenities))]
-        public partial Villa UpdateVilla(VillaUpdateDTO source);
+        public partial void UpdateVilla(VillaUpdateDTO source,Villa target);
 
         [MapperIgnoreSource(nameof(Villa.CreatedDate))]
         [MapperIgnoreSource(nameof(Villa.UpdatedDate))]

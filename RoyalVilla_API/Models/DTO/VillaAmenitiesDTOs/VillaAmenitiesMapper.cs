@@ -13,8 +13,10 @@ namespace RoyalVilla_API.Models.DTO.VillaAmenitiesDTOs
         [MapperIgnoreTarget(nameof(VillaAmenities.Villa))]
         public partial VillaAmenities ToEntity(VillaAmenitiesCreateDTO dto);
 
-        [MapperIgnoreTarget(nameof(VillaAmenitiesDTO.VillaName))]
-        public partial VillaAmenitiesDTO ToDTO(VillaAmenitiesUpdateDTO dto);
+        [MapperIgnoreTarget(nameof(VillaAmenities.CreatedDate))]
+        [MapperIgnoreTarget(nameof(VillaAmenities.UpdatedDate))]
+        [MapperIgnoreTarget(nameof(VillaAmenities.Villa))]
+        public partial void UpdateVillaAmenitiesDTO(VillaAmenitiesUpdateDTO source, VillaAmenities target);
 
         [MapperIgnoreSource(nameof(VillaAmenities.CreatedDate))]
         [MapperIgnoreSource(nameof(VillaAmenities.UpdatedDate))]
