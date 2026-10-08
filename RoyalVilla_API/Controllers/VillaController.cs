@@ -132,11 +132,11 @@ namespace RoyalVilla_API.Controllers
                     return Conflict(ApiResponse<object>.Conflict($"A villa with the name '{villaDTO.Name}' already exists."));
                 }
 
-                mapper.UpdateVilla(villaDTO, existingVilla);
+                existingVilla = mapper.UpdateVilla(villaDTO);
                 existingVilla.UpdatedDate = DateTime.Now;
 
                 await db.SaveChangesAsync();
-                return Ok(mapper.ToDTO(villaDTO));
+                return Ok(mapper.ToDTO(existingVilla));
 
             }
             catch (Exception ex)
