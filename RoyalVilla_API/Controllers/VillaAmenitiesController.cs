@@ -114,7 +114,12 @@ namespace RoyalVilla_API.Controllers
                     return NotFound(ApiResponse<object>.NotFound($"Villa amenity with ID {id} not found."));
                 }
 
-                
+                var existingVilla = await _db.Villa.FindAsync(villaAmenityDTO.VillaId);
+
+                if (existingVilla == null)
+                {
+                    return NotFound(ApiResponse<object>.NotFound($"Villa with ID {villaAmenityDTO.VillaId} not found."));
+                }
 
                 _mapper.UpdateVillaAmenitiesDTO(villaAmenityDTO, existingVillaAmenity);
                 existingVillaAmenity.UpdatedDate = DateTime.Now;
