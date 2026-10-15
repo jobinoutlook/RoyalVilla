@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RoyalVilla_API.Models.DTO.VillaAmenitiesDTOs
+namespace RoyalVilla.DTO.VillaAmenitiesDTOs
 {
-    public class VillaAmenitiesDTO
+    public class VillaAmenitiesUpdateDTO
     {
         [Required]
         public int Id { get; set; }
@@ -12,8 +12,7 @@ namespace RoyalVilla_API.Models.DTO.VillaAmenitiesDTOs
 
         public string? Description { get; set; }
 
+        [Required]
         public int VillaId { get; set; }
-
-        public string? VillaName { get; set; }
     }
 }

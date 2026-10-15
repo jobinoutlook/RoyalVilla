@@ -1,7 +1,25 @@
+using RoyalVillaWeb.Models;
+using RoyalVillaWeb.Services;
+using RoyalVillaWeb.Services.IServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<VillaMapper>();
+
+builder.Services.AddHttpClient("RoyalVillaAPI", client =>
+{
+    var villaAPIUrl = builder.Configuration["ServiceUrls:VillaAPI"]??"";
+    client.BaseAddress = new Uri(villaAPIUrl);
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
+builder.Services.AddScoped<IVillaService, VillaService>();
+
+//builder.Services.AddSingleton<UserMapper>();
+//builder.Services.AddSingleton<VillaAmenitiesMapper>();
 
 var app = builder.Build();
 

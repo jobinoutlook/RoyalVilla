@@ -1,6 +1,5 @@
 ﻿using Riok.Mapperly.Abstractions;
-using RoyalVilla_API.Models.DTO;
-using RoyalVilla_API.Models;
+using RoyalVilla.DTO.VillaDTOs;
 
 namespace RoyalVilla_API.Models.DTO.VillaDTOs
 {

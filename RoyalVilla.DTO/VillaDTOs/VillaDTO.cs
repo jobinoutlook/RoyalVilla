@@ -1,18 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RoyalVilla_API.Models.DTO.VillaDTOs
+namespace RoyalVilla.DTO.VillaDTOs
 {
-    public class VillaCreateDTO
+    public class VillaDTO
     {
-        [Required]
-        [MaxLength(50)]
+        public int Id { get; set; }
         public required string Name { get; set; }
         public string? Details { get; set; }
         public double Rate { get; set; }
         public int Sqft { get; set; }
         public int Occupancy { get; set; }
         public string? ImageUrl { get; set; }
-       
-
     }
 }

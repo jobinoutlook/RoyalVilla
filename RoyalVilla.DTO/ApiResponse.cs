@@ -1,7 +1,7 @@
-﻿using RoyalVilla_API.Models.DTO;
+﻿using RoyalVilla.DTO;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace RoyalVilla_API.Models.DTO
+namespace RoyalVilla.DTO
 {
     public class ApiResponse<TData>
     {

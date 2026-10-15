@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using RoyalVilla_API.Data;
 using RoyalVilla_API.Models.DTO;
 using RoyalVilla_API.Models.DTO.VillaAmenitiesDTOs;
-using RoyalVilla_API.Models.DTO.VillaDTOs;
+using RoyalVilla.DTO.VillaDTOs;
+using RoyalVilla.DTO;
+using RoyalVilla.DTO.VillaAmenitiesDTOs;
 
 namespace RoyalVilla_API.Controllers
 {

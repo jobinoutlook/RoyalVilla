@@ -1,14 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RoyalVilla_API.Models.DTO.VillaAmenitiesDTOs
+namespace RoyalVilla.DTO.VillaAmenitiesDTOs
 {
-    public class VillaAmenitiesUpdateDTO
+    public class VillaAmenitiesCreateDTO
     {
         [Required]
-        public int Id { get; set; }
-        [Required]
         [MaxLength(50)]
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         public string? Description { get; set; }
 

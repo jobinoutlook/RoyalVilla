@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RoyalVilla_API.Models.DTO.VillaDTOs
+namespace RoyalVilla.DTO.VillaDTOs
 {
     public class VillaUpdateDTO
     {

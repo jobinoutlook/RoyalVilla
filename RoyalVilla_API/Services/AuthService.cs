@@ -2,8 +2,9 @@
 using Microsoft.IdentityModel.Tokens;
 using RoyalVilla_API.Data;
 using RoyalVilla_API.Models;
-using RoyalVilla_API.Models.DTO;
+using RoyalVilla.DTO;
 using System.Security.Claims;
+using RoyalVilla_API.Models.DTO;
 
 namespace RoyalVilla_API.Services
 {
@@ -52,6 +53,8 @@ namespace RoyalVilla_API.Services
             }
         }
 
+        
+
         public async Task<UserDTO?> RegisterAsync(RegisterationRequestDTO registerationRequestDTO)
         {
             try
@@ -82,6 +85,8 @@ namespace RoyalVilla_API.Services
                 throw new InvalidOperationException($"An error occurred while registering the user: {ex.Message}", ex);
             }
         }
+
+        
 
         private string GenerateJwtToken(User user)
         {
