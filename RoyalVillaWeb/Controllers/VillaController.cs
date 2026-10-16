@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using RoyalVilla.DTO;
@@ -47,7 +48,12 @@ namespace RoyalVillaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(VillaCreateDTO createDTO)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+            {
+                return View(createDTO);
+            }
+
+            try
             {
                 var response = await _villaService.CreateAsync<ApiResponse<VillaDTO>>(createDTO, "");
                 if (response != null && response.IsSuccess)
@@ -58,9 +64,80 @@ namespace RoyalVillaWeb.Controllers
                 else
                 {
                     TempData["error"] = "Error creating villa.";
+
+                    return View(createDTO);
                 }
             }
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                TempData["error"] = $"An Error Occured {ex.Message}";
+                return View(createDTO);
+            }
+
+            
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["error"] = "Invalid villa ID";
+
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            try
+            {
+                var response = await _villaService.GetAsync<ApiResponse<VillaDTO>>(id, "");
+                if (response != null && response.IsSuccess && response.Data != null)
+                {
+                    
+                    return View(response.Data);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = $"An Error Occured {ex.Message}";
+                //return RedirectToAction(nameof(Index));
+            }
+
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(VillaCreateDTO createDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(createDTO);
+            }
+
+            try
+            {
+                var response = await _villaService.CreateAsync<ApiResponse<VillaDTO>>(createDTO, "");
+                if (response != null && response.IsSuccess)
+                {
+                    TempData["success"] = "Villa created successfully!";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData["error"] = "Error creating villa.";
+
+                    return View(createDTO);
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = $"An Error Occured {ex.Message}";
+                return View(createDTO);
+            }
+
+
         }
     }
 }
