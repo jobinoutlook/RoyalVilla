@@ -100,7 +100,7 @@ namespace RoyalVillaWeb.Controllers
             catch (Exception ex)
             {
                 TempData["error"] = $"An Error Occured {ex.Message}";
-                //return RedirectToAction(nameof(Index));
+               
             }
 
 
@@ -109,35 +109,85 @@ namespace RoyalVillaWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(VillaCreateDTO createDTO)
+        public async Task<IActionResult> Delete(VillaDTO villaDTO)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(createDTO);
-            }
+            
 
             try
             {
-                var response = await _villaService.CreateAsync<ApiResponse<VillaDTO>>(createDTO, "");
-                if (response != null && response.IsSuccess)
+                var response = await _villaService.DeleteAsync<ApiResponse<object>>(villaDTO.Id,"");
+                if (response != null && response.IsSuccess && response.Data != null)
                 {
-                    TempData["success"] = "Villa created successfully!";
-                    return RedirectToAction(nameof(Index));
+                    TempData["success"] = "Villa deleted successfully!";
+                   
                 }
-                else
-                {
-                    TempData["error"] = "Error creating villa.";
-
-                    return View(createDTO);
-                }
+                
             }
             catch (Exception ex)
             {
                 TempData["error"] = $"An Error Occured {ex.Message}";
-                return View(createDTO);
+                
+            }
+
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["error"] = "Invalid villa ID";
+
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            try
+            {
+                var response = await _villaService.GetAsync<ApiResponse<VillaDTO>>(id, "");
+                if (response != null && response.IsSuccess && response.Data != null)
+                {
+                    var updateDTO =_mapper.ToUpdateDTO(response.Data);
+                    return View(updateDTO);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = $"An Error Occured {ex.Message}";
+
             }
 
 
+            return View();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(VillaUpdateDTO updateDTO)
+        {
+
+
+            try
+            {
+                var response = await _villaService.UpdateAsync<ApiResponse<object>>(updateDTO, "");
+                if (response != null && response.IsSuccess && response.Data != null)
+                {
+                    TempData["success"] = "Villa updated successfully!";
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = $"An Error Occured {ex.Message}";
+
+            }
+
+            return RedirectToAction(nameof(Index));
+
+        }
+
     }
 }

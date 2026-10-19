@@ -28,27 +28,31 @@ namespace RoyalVillaWeb.Services
         {
             try
             {
+                //string typeName = typeof(T).Name;
+
                 var client = _httpClient.CreateClient("RoyalVillaAPI");
                 var message = new HttpRequestMessage
                 {
-                    RequestUri = new Uri(apiRequest.Url??"", uriKind: UriKind.Relative),
+                    RequestUri = new Uri(apiRequest.Url ?? "", uriKind: UriKind.Relative),
                     Method = GetHttpMethod(apiRequest.ApiType)
                 };
 
-                if(apiRequest.Data != null)
+                if (apiRequest.Data != null)
                 {
                     message.Content = JsonContent.Create(apiRequest.Data, options: JsonOptions);
                 }
 
                 var apiResponse = await client.SendAsync(message);
 
-                return await apiResponse.Content.ReadFromJsonAsync<T>(options: JsonOptions);
+                var content = await apiResponse.Content.ReadFromJsonAsync<T>(options: JsonOptions);
+
+                return content;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Unexpected Error: {ex.Message}");
                 return default;
-                
+
             }
         }
 
