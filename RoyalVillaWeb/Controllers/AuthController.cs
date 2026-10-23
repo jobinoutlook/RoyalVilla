@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using RoyalVilla.DTO;
 using RoyalVilla.DTO.VillaDTOs;
 using RoyalVillaWeb.Models;
 using RoyalVillaWeb.Services.IServices;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace RoyalVillaWeb.Controllers
 {
@@ -24,6 +28,8 @@ namespace RoyalVillaWeb.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginRequestDTO loginRequestDTO)
         {
             try
@@ -32,6 +38,17 @@ namespace RoyalVillaWeb.Controllers
                 if (response != null && response.IsSuccess && response.Data != null)
                 {
                     LoginResponseDTO model = response.Data;
+
+                    JwtSecurityTokenHandler handler = new(); 
+                    JwtSecurityToken jwt = handler.ReadJwtToken(model.Token);
+
+                    ClaimsIdentity identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                    identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == "email").Value));
+                    identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
+                    ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    return RedirectToAction("Index", "Home");
+
                 }
             }
             catch (Exception ex)
@@ -57,6 +74,33 @@ namespace RoyalVillaWeb.Controllers
             return View(registrationRequestDTO);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterationRequestDTO registrationRequestDTO)
+        {
+            try
+            {
+                ApiResponse<UserDTO> response = await _authService.RegisterAsync<ApiResponse<UserDTO>>(registrationRequestDTO);
+                if (response != null && response.IsSuccess && response.Data != null)
+                {
+                   TempData["success"] = "Registration successful. Please log in.";
+                   return RedirectToAction("Login");
+                }
+                else
+                {
+                    TempData["error"] = response?.Message ?? "Registration failed. Please try again";
+                    return View(registrationRequestDTO);
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = $"An error occurred: {ex.Message}";
+            }
+
+
+            return View(registrationRequestDTO);
+        }
+
         public IActionResult AccessDenied()
         {
             return View();
@@ -64,7 +108,8 @@ namespace RoyalVillaWeb.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            return View();
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
         

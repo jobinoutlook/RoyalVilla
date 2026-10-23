@@ -33,7 +33,7 @@ namespace RoyalVilla_API.Controllers
 
                 if (await _authService.IsEmailExistsAsync(registerationRequestDTO.Email))
                 {
-                    var errorResponse = ApiResponse<object>.Conflict("User with email already exists");
+                    var errorResponse = ApiResponse<object>.Conflict($"User with email '{registerationRequestDTO.Email}' already exists");
                     return Conflict(errorResponse);
                 }
 
@@ -46,7 +46,7 @@ namespace RoyalVilla_API.Controllers
 
                 //Auth Service
 
-                var response = ApiResponse<UserDTO>.CreatedAt(user, "User created successfully");
+                var response = ApiResponse<UserDTO>.CreatedAt(user, "User registered successfully");
 
                 return CreatedAtAction(nameof(Register), response);
             }

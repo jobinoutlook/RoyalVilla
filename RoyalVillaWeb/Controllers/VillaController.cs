@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -19,6 +20,8 @@ namespace RoyalVillaWeb.Controllers
             _villaService = villaService;
             _mapper = mapper;
         }
+
+        //[Authorize]
         public async Task<IActionResult> Index()
         {
             List<VillaDTO> villaList = new();

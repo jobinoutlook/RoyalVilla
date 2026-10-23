@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using RoyalVillaWeb.Models;
 using RoyalVillaWeb.Services;
 using RoyalVillaWeb.Services.IServices;
@@ -8,6 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<VillaMapper>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.HttpOnly = true;
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+        options.SlidingExpiration = true;
+        options.LoginPath = "/Auth/Login";
+        //options.LogoutPath = "/Auth/Logout";
+        //options.AccessDeniedPath = "/Auth/AccessDenied";
+    });
 
 builder.Services.AddHttpClient("RoyalVillaAPI", client =>
 {
@@ -35,6 +47,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
