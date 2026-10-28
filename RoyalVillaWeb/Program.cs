@@ -7,6 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddSingleton<VillaMapper>();
 
@@ -18,7 +26,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.SlidingExpiration = true;
         options.LoginPath = "/Auth/Login";
         //options.LogoutPath = "/Auth/Logout";
-        //options.AccessDeniedPath = "/Auth/AccessDenied";
+        options.AccessDeniedPath = "/Auth/AccessDenied";
     });
 
 builder.Services.AddHttpClient("RoyalVillaAPI", client =>
@@ -46,7 +54,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 

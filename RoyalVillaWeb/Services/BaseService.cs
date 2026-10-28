@@ -2,6 +2,7 @@
 using RoyalVilla.DTO;
 using RoyalVillaWeb.Models;
 using RoyalVillaWeb.Services.IServices;
+using System.Net.Http.Headers;
 using System.Text.Json;
 
 namespace RoyalVillaWeb.Services
@@ -17,11 +18,14 @@ namespace RoyalVillaWeb.Services
 
         public ApiResponse<object> ResponseModel { get; set; }
 
-        public BaseService(IHttpClientFactory httpClientFactory)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public BaseService(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
         {
 
             this.ResponseModel = new ApiResponse<object>();
             this._httpClient = httpClientFactory;
+            this._httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<T?> SendAsync<T>(ApiRequest apiRequest)
@@ -36,6 +40,13 @@ namespace RoyalVillaWeb.Services
                     RequestUri = new Uri(apiRequest.Url ?? "", uriKind: UriKind.Relative),
                     Method = GetHttpMethod(apiRequest.ApiType)
                 };
+
+                var token = _httpContextAccessor.HttpContext?.Session?.GetString(SD.SessionToken);
+
+                if(!string.IsNullOrEmpty(token))
+                {
+                    message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
 
                 if (apiRequest.Data != null)
                 {

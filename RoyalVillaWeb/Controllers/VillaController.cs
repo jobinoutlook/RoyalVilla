@@ -21,13 +21,13 @@ namespace RoyalVillaWeb.Controllers
             _mapper = mapper;
         }
 
-        //[Authorize]
+        
         public async Task<IActionResult> Index()
         {
             List<VillaDTO> villaList = new();
             try
             {
-                var response = await _villaService.GetAllAsync<ApiResponse<List<VillaDTO>>>("");
+                var response = await _villaService.GetAllAsync<ApiResponse<List<VillaDTO>>>();
                 if (response != null && response.IsSuccess && response.Data != null)
                 {
                     villaList = response.Data;
@@ -42,12 +42,14 @@ namespace RoyalVillaWeb.Controllers
             return View(villaList);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(VillaCreateDTO createDTO)
         {
@@ -58,7 +60,7 @@ namespace RoyalVillaWeb.Controllers
 
             try
             {
-                var response = await _villaService.CreateAsync<ApiResponse<VillaDTO>>(createDTO, "");
+                var response = await _villaService.CreateAsync<ApiResponse<VillaDTO>>(createDTO);
                 if (response != null && response.IsSuccess)
                 {
                     TempData["success"] = "Villa created successfully!";
@@ -80,6 +82,7 @@ namespace RoyalVillaWeb.Controllers
             
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0)
@@ -92,7 +95,7 @@ namespace RoyalVillaWeb.Controllers
 
             try
             {
-                var response = await _villaService.GetAsync<ApiResponse<VillaDTO>>(id, "");
+                var response = await _villaService.GetAsync<ApiResponse<VillaDTO>>(id);
                 if (response != null && response.IsSuccess && response.Data != null)
                 {
                     
@@ -111,6 +114,7 @@ namespace RoyalVillaWeb.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(VillaDTO villaDTO)
         {
@@ -118,7 +122,7 @@ namespace RoyalVillaWeb.Controllers
 
             try
             {
-                var response = await _villaService.DeleteAsync<ApiResponse<object>>(villaDTO.Id,"");
+                var response = await _villaService.DeleteAsync<ApiResponse<object>>(villaDTO.Id);
                 if (response != null && response.IsSuccess && response.Data != null)
                 {
                     TempData["success"] = "Villa deleted successfully!";
@@ -136,6 +140,7 @@ namespace RoyalVillaWeb.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             if (id <= 0)
@@ -148,7 +153,7 @@ namespace RoyalVillaWeb.Controllers
 
             try
             {
-                var response = await _villaService.GetAsync<ApiResponse<VillaDTO>>(id, "");
+                var response = await _villaService.GetAsync<ApiResponse<VillaDTO>>(id);
                 if (response != null && response.IsSuccess && response.Data != null)
                 {
                     var updateDTO =_mapper.ToUpdateDTO(response.Data);
@@ -167,6 +172,7 @@ namespace RoyalVillaWeb.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(VillaUpdateDTO updateDTO)
         {
@@ -174,7 +180,7 @@ namespace RoyalVillaWeb.Controllers
 
             try
             {
-                var response = await _villaService.UpdateAsync<ApiResponse<object>>(updateDTO, "");
+                var response = await _villaService.UpdateAsync<ApiResponse<object>>(updateDTO);
                 if (response != null && response.IsSuccess && response.Data != null)
                 {
                     TempData["success"] = "Villa updated successfully!";

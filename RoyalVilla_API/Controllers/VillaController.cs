@@ -29,7 +29,7 @@ namespace RoyalVilla_API.Controllers
         }
 
         [HttpGet]
-        [Authorize]//(Roles = "Admin")]
+        //[Authorize]//(Roles = "Admin")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<VillaDTO>>),StatusCodes.Status200OK)]   //for documentation
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ApiResponse<IEnumerable<VillaDTO>>>> GetVillas()
@@ -41,6 +41,7 @@ namespace RoyalVilla_API.Controllers
             return Ok(response);
         }
 
+        //[Authorize]
         [HttpGet("{id:int}")]
         //[AllowAnonymous]
         public async Task<ActionResult<ApiResponse<VillaDTO>>> GetVillaById(int id)
@@ -72,6 +73,7 @@ namespace RoyalVilla_API.Controllers
         //    return $"Get Villa with ID: {id} and Name: {name}";
         //}
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ApiResponse<VillaDTO>>> CreateVilla(VillaCreateDTO villaDTO)
         {
@@ -104,6 +106,7 @@ namespace RoyalVilla_API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ApiResponse<VillaDTO>>> UpdateVilla(int id, VillaUpdateDTO villaDTO)
         {
@@ -148,6 +151,7 @@ namespace RoyalVilla_API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<ApiResponse<object>>> DeleteVilla(int id)
         {
