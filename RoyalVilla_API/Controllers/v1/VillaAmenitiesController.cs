@@ -7,10 +7,14 @@ using RoyalVilla_API.Models.DTO.VillaAmenitiesDTOs;
 using RoyalVilla.DTO.VillaDTOs;
 using RoyalVilla.DTO;
 using RoyalVilla.DTO.VillaAmenitiesDTOs;
+using Asp.Versioning;
 
-namespace RoyalVilla_API.Controllers
+namespace RoyalVilla_API.Controllers.v1
 {
-    [Route("api/villa-amenities")]
+    //[Route("api/villa-amenities")]
+    [Route("api/v{version:apiVersion}/villa-amenitie")]
+    [ApiVersion("1.0")]
+    //[ApiVersion("2.0")]
     [ApiController]
     public class VillaAmenitiesController : ControllerBase
     {

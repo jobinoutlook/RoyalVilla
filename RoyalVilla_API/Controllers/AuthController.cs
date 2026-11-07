@@ -4,11 +4,13 @@ using RoyalVilla_API.Models.DTO;
 using RoyalVilla.DTO.VillaDTOs;
 using RoyalVilla_API.Services;
 using RoyalVilla.DTO;
+using Asp.Versioning;
 
 
 namespace RoyalVilla_API.Controllers
 {
     [Route("api/auth")]
+    [ApiVersionNeutral]
     [ApiController]
     public class AuthController : ControllerBase
     {

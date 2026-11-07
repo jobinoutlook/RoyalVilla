@@ -1,4 +1,5 @@
 ﻿
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +11,12 @@ using RoyalVilla_API.Models.DTO;
 using RoyalVilla_API.Models.DTO.VillaDTOs;
 using System.Collections;
 
-namespace RoyalVilla_API.Controllers
+namespace RoyalVilla_API.Controllers.v2
 {
+    
+    [Route("api/v{version:apiVersion}/villa")]
+    [ApiVersion("2.0")]
     [ApiController]
-    [Route("api/villa")]
     //[Authorize(Roles = "Customer,Admin")]
     public class VillaController : ControllerBase
     {
@@ -29,42 +32,18 @@ namespace RoyalVilla_API.Controllers
         }
 
         [HttpGet]
-        //[Authorize]//(Roles = "Admin")]
-        [ProducesResponseType(typeof(ApiResponse<IEnumerable<VillaDTO>>),StatusCodes.Status200OK)]   //for documentation
-        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ApiResponse<IEnumerable<VillaDTO>>>> GetVillas()
+       
+        public async Task<ActionResult<string>> GetVillas()
         {
-            var villas = await db.Villa.ToListAsync();
-
-            var response = ApiResponse<IEnumerable<VillaDTO>>.Ok(mapper.ToDTOList(villas), "Villas retrieved successfully.");
-
-            return Ok(response);
+            return "This is V2";
         }
 
         //[Authorize]
         [HttpGet("{id:int}")]
         //[AllowAnonymous]
-        public async Task<ActionResult<ApiResponse<VillaDTO>>> GetVillaById(int id)
+        public async Task<ActionResult<String>> GetVillaById(int id)
         {
-            try
-            {
-                if(id <= 0)
-                {
-                    return BadRequest(ApiResponse<object?>.BadRequest("Invalid villa ID. ID must be greater than zero."));
-                }   
-
-                var villa = await db.Villa.FindAsync(id);
-                if (villa == null)
-                {
-                    return NotFound(ApiResponse<object?>.NotFound($"Villa with ID {id} not found."));
-                }
-                return Ok(ApiResponse<VillaDTO>.Ok(mapper.ToDTO(villa), "Villa retrieved successfully."));
-            }
-            catch (Exception ex)
-            {
-                var errorResponse = ApiResponse<object>.Error(500, $"An error occurred while retrieving the villa", ex.Message);
-                return StatusCode(500, errorResponse);
-            }
+            return "This is V2 for id " + id;
         }
 
         //[HttpGet("{id:int}/{name}")]
